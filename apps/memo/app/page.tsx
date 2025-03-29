@@ -1,12 +1,14 @@
-import { Button } from "@workspace/ui/components/button"
+import MemoEditor from "@/components/MemoEditor";
+import MemoList from "@/components/MemoList";
 
-export default function Page() {
+export default function Home() {
   return (
-    <div className="flex items-center justify-center min-h-svh">
-      <div className="flex flex-col items-center justify-center gap-4">
-        <h1 className="text-2xl font-bold">Hello World</h1>
-        <Button size="sm">Button</Button>
+    <main className="container mx-auto max-w-2xl py-8">
+      <h1 className="text-2xl font-bold mb-6">Simple Memo</h1>
+      <MemoEditor />
+      <div className="mt-8">
+        <MemoList />
       </div>
-    </div>
-  )
+    </main>
+  );
 }
