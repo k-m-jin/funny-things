@@ -61,11 +61,7 @@ export const useMemoStore = create<MemoStore>()(
           // 검색어가 있는 경우 부분 일치도 검색
           const matchesSearch =
             !searchQuery ||
-            memo.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            memo.tags?.some((tag) =>
-              tag.toLowerCase().includes(searchQuery.toLowerCase())
-            ) ||
-            memo.category?.toLowerCase().includes(searchQuery.toLowerCase());
+            memo.content.toLowerCase().includes(searchQuery.toLowerCase());
 
           // 카테고리 필터링
           const matchesCategory =

@@ -7,10 +7,12 @@ import { useForm } from "react-hook-form";
 import { MemoFormData } from "@/types/memo";
 import { v4 as uuidv4 } from "uuid";
 import { useMemoStore } from "@/store/memoStore";
+import { AlertModal } from "./AlertModal";
 
 export default function MemoEditor() {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
+  const [showSaveAlert, setShowSaveAlert] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   const { register, handleSubmit, setValue, watch } = useForm<MemoFormData>({
@@ -53,6 +55,8 @@ export default function MemoEditor() {
   };
 
   const onSubmit = (data: MemoFormData) => {
+    if (!data.content.trim()) return;
+
     const newMemo = {
       id: uuidv4(),
       content: data.content,
@@ -64,6 +68,7 @@ export default function MemoEditor() {
     addMemo(newMemo);
     setValue("content", "");
     setTranscript("");
+    setShowSaveAlert(true);
   };
 
   return (
@@ -75,7 +80,9 @@ export default function MemoEditor() {
           className="min-h-[150px]"
         />
         <div className="flex space-x-2">
-          <Button type="submit">저장</Button>
+          <Button type="submit" disabled={!watch("content").trim()}>
+            저장
+          </Button>
           <Button
             type="button"
             variant="outline"
@@ -85,6 +92,12 @@ export default function MemoEditor() {
           </Button>
         </div>
       </form>
+
+      <AlertModal
+        isOpen={showSaveAlert}
+        onClose={() => setShowSaveAlert(false)}
+        message="메모가 저장되었습니다."
+      />
     </div>
   );
 }

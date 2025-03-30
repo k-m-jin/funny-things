@@ -1,16 +1,27 @@
 "use client";
 
+import { useState } from "react";
 import { useMemoStore } from "@/store/memoStore";
 import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { highlightText } from "@/lib/highlight";
+import { ConfirmModal } from "./ConfirmModal";
+import { AlertModal } from "./AlertModal";
 
 export default function MemoList() {
-  const getFilteredMemos = useMemoStore((state) => state.getFilteredMemos);
+  const [memoToDelete, setMemoToDelete] = useState<string | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
+
+  // 메모 목록과 관련 함수들을 직접 store에서 가져옵니다
+  const memos = useMemoStore((state) => state.getFilteredMemos());
   const searchQuery = useMemoStore((state) => state.searchQuery);
   const deleteMemo = useMemoStore((state) => state.deleteMemo);
-  const memos = getFilteredMemos();
+
+  const handleDelete = (id: string) => {
+    deleteMemo(id);
+    setShowAlert(true);
+  };
 
   return (
     <div className="space-y-4">
@@ -39,7 +50,7 @@ export default function MemoList() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => deleteMemo(memo.id)}
+                onClick={() => setMemoToDelete(memo.id)}
                 className="text-red-500 hover:text-red-700"
               >
                 삭제
@@ -66,6 +77,27 @@ export default function MemoList() {
           </div>
         ))
       )}
+
+      <ConfirmModal
+        isOpen={!!memoToDelete}
+        onClose={() => setMemoToDelete(null)}
+        onConfirm={() => {
+          if (memoToDelete) {
+            handleDelete(memoToDelete);
+          }
+        }}
+        title="메모 삭제"
+        message="정말로 이 메모를 삭제하시겠습니까?"
+        confirmText="삭제"
+        cancelText="취소"
+        confirmVariant="destructive"
+      />
+
+      <AlertModal
+        isOpen={showAlert}
+        onClose={() => setShowAlert(false)}
+        message="메모가 삭제되었습니다."
+      />
     </div>
   );
 }
