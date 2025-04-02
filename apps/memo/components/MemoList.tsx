@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMemoStore } from "@/store/memoStore";
 import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
@@ -60,38 +60,7 @@ export default function MemoList() {
                 <span className="ml-2 px-2 py-1 bg-gray-100 rounded-full text-xs">
                   {memo.category}
                 </span>
-                {memo.category && (
-                  <span className="ml-2 px-2 py-1 bg-gray-100 rounded-full text-xs">
-                    {memo.category}
-                  </span>
-                )}
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setMemoToDelete(memo.id)}
-                className="text-red-500 hover:text-red-700"
-              >
-                삭제
-              </Button>
-            </div>
-            <p
-              className="whitespace-pre-wrap"
-              dangerouslySetInnerHTML={{
-                __html: highlightText(memo.content, searchQuery),
-              }}
-            />
-            <div className="mt-2 space-x-2">
-              {memo.isVoiceRecorded && (
-                <span className="inline-block text-xs text-blue-500">
-                  🎤 음성으로 작성됨
-                </span>
               )}
-              {memo.tags?.map((tag) => (
-                <span key={tag} className="inline-block text-xs text-gray-500">
-                  #{tag}
-                </span>
-              ))}
             </div>
             <Button
               variant="ghost"

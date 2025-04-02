@@ -4,6 +4,8 @@ import { Memo } from "@/types/memo";
 
 interface MemoStore {
   memos: Memo[];
+  isLoading: boolean;
+  fetchMemos: () => Promise<void>;
   searchQuery: string;
   selectedCategory: string | null;
   selectedTags: string[];
@@ -22,6 +24,19 @@ export const useMemoStore = create<MemoStore>()(
   persist(
     (set, get) => ({
       memos: [],
+      isLoading: false,
+      fetchMemos: async () => {
+        set({ isLoading: true });
+        try {
+          // Supabase나 다른 데이터 소스에서 메모를 가져오는 로직
+          const response = await supabase.from("memos").select("*");
+          set({ memos: response.data || [] });
+        } catch (error) {
+          console.error("메모를 가져오는 중 에러 발생:", error);
+        } finally {
+          set({ isLoading: false });
+        }
+      },
       searchQuery: "",
       selectedCategory: null,
       selectedTags: [],
