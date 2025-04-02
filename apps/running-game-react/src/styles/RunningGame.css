@@ -1,0 +1,165 @@
+/* 게임 컨테이너 스타일 */
+.game-container {
+  width: 800px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+}
+
+/* 게임 모드 버튼 */
+.game-mode {
+  margin-bottom: 20px;
+}
+
+.game-mode button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 20px;
+  transition: all 0.3s;
+  cursor: pointer;
+  width: 200px;
+}
+
+.multiplayer-btn {
+  background-color: #4c7af5;
+  color: white;
+  border: 2px solid #4c7af5;
+}
+
+.singleplayer-btn {
+  background-color: #f57a4c;
+  color: white;
+  border: 2px solid #f57a4c;
+}
+
+/* 게임 정보 영역 스타일 */
+.game-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  flex-wrap: wrap;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.player-status {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+/* 게임 영역 스타일 */
+#game-area {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background-color: #ddd;
+  border: 2px solid #333;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* 플레이어 스타일 */
+.player {
+  position: absolute;
+  width: 40px;
+  height: 60px;
+  bottom: 20px;
+  transform: translateX(-50%);
+  border-radius: 5px;
+  z-index: 10;
+  transition: left 0.1s ease;
+}
+
+.player-1 {
+  /* 이미 스타일 속성에서 색상 지정됨 */
+}
+
+.player-2 {
+  /* 이미 스타일 속성에서 색상 지정됨 */
+}
+
+/* 장애물 스타일 */
+.obstacle {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-color: #333;
+  border-radius: 50%;
+}
+
+/* 트랙 스타일 */
+#track {
+  position: absolute;
+  width: 100%;
+  height: 20px;
+  bottom: 0;
+  background-color: #555;
+}
+
+/* 컨트롤 영역 스타일 */
+.controls {
+  margin-top: 20px;
+}
+
+.controls p {
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* 버튼 스타일 */
+button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .game-container {
+    width: 95%;
+    padding: 10px;
+  }
+
+  #game-area {
+    height: 350px;
+  }
+
+  .controls button {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+
+  .game-info {
+    font-size: 16px;
+  }
+
+  .player-status {
+    font-size: 18px;
+  }
+}
