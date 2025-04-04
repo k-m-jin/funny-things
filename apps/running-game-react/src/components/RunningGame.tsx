@@ -40,6 +40,9 @@ const RunningGame: React.FC = () => {
   const animationRef = useRef<number>(0);
   const lastObstacleId = useRef<number>(0);
 
+  // 카운트다운 상태 추가
+  const [countdown, setCountdown] = useState<number | null>(null);
+
   // 키보드 입력 처리
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -121,58 +124,6 @@ const RunningGame: React.FC = () => {
     });
   }, [gameState.players]);
 
-  // 장애물 생성
-  useEffect(() => {
-    if (!gameState.gameRunning) return;
-
-    const createObstacle = () => {
-      if (!gameState.gameRunning) return;
-
-      const newId = lastObstacleId.current + 1;
-      lastObstacleId.current = newId;
-
-      // 랜덤 위치에 장애물 생성
-      const position = Math.random() * 90 + 5; // 5% ~ 95% 사이
-
-      setGameState((prev) => ({
-        ...prev,
-        obstacles: [...prev.obstacles, { id: newId, position, top: 0 }],
-      }));
-
-      // 다음 장애물 생성 예약
-      setTimeout(createObstacle, 3000 / gameState.speed);
-    };
-
-    // 게임 시작 후 일정 시간 후에 첫 장애물 생성 (즉시 생성하지 않음)
-    const timerId = setTimeout(createObstacle, 2000);
-    return () => clearTimeout(timerId);
-  }, [gameState.gameRunning, gameState.speed]);
-
-  // 충돌 감지 함수
-  const checkCollision = (player: Player, obstacle: Obstacle): boolean => {
-    if (
-      !playerRefs.current.has(player.id) ||
-      !obstaclesRef.current.has(obstacle.id)
-    )
-      return false;
-
-    const playerEl = playerRefs.current.get(player.id);
-    const obstacleEl = obstaclesRef.current.get(obstacle.id);
-
-    if (!playerEl || !obstacleEl) return false;
-
-    const playerRect = playerEl.getBoundingClientRect();
-    const obstacleRect = obstacleEl.getBoundingClientRect();
-
-    // 충돌 감지 영역을 약간 줄임 (더 관대하게)
-    return !(
-      playerRect.right - 10 < obstacleRect.left + 10 ||
-      playerRect.left + 10 > obstacleRect.right - 10 ||
-      playerRect.bottom - 10 < obstacleRect.top + 10 ||
-      playerRect.top + 10 > obstacleRect.bottom - 10
-    );
-  };
-
   // 게임 업데이트 (애니메이션 프레임)
   useEffect(() => {
     if (!gameState.gameRunning) return;
@@ -220,7 +171,7 @@ const RunningGame: React.FC = () => {
         allPlayersDead = updatedPlayers.every((player) => !player.isAlive);
 
         // 모든 플레이어가 죽었다면 게임 오버
-        if (allPlayersDead) {
+        if (allPlayersDead && prev.gameRunning) {
           setTimeout(() => gameOver(updatedPlayers), 100);
           return { ...prev, gameRunning: false };
         }
@@ -260,6 +211,64 @@ const RunningGame: React.FC = () => {
     return () => cancelAnimationFrame(animationRef.current);
   }, [gameState.gameRunning]);
 
+  // 장애물 생성
+  useEffect(() => {
+    if (!gameState.gameRunning) return;
+
+    let obstacleTimerId: NodeJS.Timeout;
+
+    const createObstacle = () => {
+      if (!gameState.gameRunning) return; // 게임이 중단되면 장애물 생성 중단
+
+      const newId = lastObstacleId.current + 1;
+      lastObstacleId.current = newId;
+
+      // 랜덤 위치에 장애물 생성
+      const position = Math.random() * 90 + 5; // 5% ~ 95% 사이
+
+      setGameState((prev) => ({
+        ...prev,
+        obstacles: [...prev.obstacles, { id: newId, position, top: 0 }],
+      }));
+
+      // 다음 장애물 생성 예약
+      obstacleTimerId = setTimeout(() => {
+        if (gameState.gameRunning) {
+          createObstacle();
+        }
+      }, 3000 / gameState.speed);
+    };
+
+    // 게임 시작 후 일정 시간 후에 첫 장애물 생성 (즉시 생성하지 않음)
+    obstacleTimerId = setTimeout(createObstacle, 2000);
+    return () => clearTimeout(obstacleTimerId);
+  }, [gameState.gameRunning, gameState.speed]);
+
+  // 충돌 감지 함수
+  const checkCollision = (player: Player, obstacle: Obstacle): boolean => {
+    if (
+      !playerRefs.current.has(player.id) ||
+      !obstaclesRef.current.has(obstacle.id)
+    )
+      return false;
+
+    const playerEl = playerRefs.current.get(player.id);
+    const obstacleEl = obstaclesRef.current.get(obstacle.id);
+
+    if (!playerEl || !obstacleEl) return false;
+
+    const playerRect = playerEl.getBoundingClientRect();
+    const obstacleRect = obstacleEl.getBoundingClientRect();
+
+    // 충돌 감지 영역을 약간 줄임 (더 관대하게)
+    return !(
+      playerRect.right - 10 < obstacleRect.left + 10 ||
+      playerRect.left + 10 > obstacleRect.right - 10 ||
+      playerRect.bottom - 10 < obstacleRect.top + 10 ||
+      playerRect.top + 10 > obstacleRect.bottom - 10
+    );
+  };
+
   // 게임 모드 전환
   const toggleGameMode = () => {
     if (gameState.gameRunning) return; // 게임 중에는 모드 변경 불가
@@ -295,21 +304,27 @@ const RunningGame: React.FC = () => {
     // 장애물과 플레이어 초기화
     obstaclesRef.current.clear();
 
-    const modeText = isMultiplayer ? "멀티플레이어" : "싱글플레이어";
-    alert(
-      `${modeText} 게임을 시작합니다!\n\n${isMultiplayer ? "플레이어1: A,D 키\n플레이어2: ←,→ 화살표 키" : "플레이어: ←,→ 화살표 키"}`
-    );
-
-    setGameState((prev) => ({
-      ...prev,
-      gameRunning: true,
-      obstacles: [], // 장애물 초기화
-      players: prev.players.map((player) => ({
-        ...player,
-        isAlive: true,
-        score: 0,
-      })),
-    }));
+    // 카운트다운 시작
+    setCountdown(3);
+    const countdownInterval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev === 1) {
+          clearInterval(countdownInterval);
+          setCountdown(null);
+          setGameState((prev) => ({
+            ...prev,
+            gameRunning: true,
+            obstacles: [], // 장애물 초기화
+            players: prev.players.map((player) => ({
+              ...player,
+              isAlive: true,
+              score: 0,
+            })),
+          }));
+        }
+        return prev ? prev - 1 : null;
+      });
+    }, 1000);
   };
 
   // 게임 재시작
@@ -356,6 +371,11 @@ const RunningGame: React.FC = () => {
 
   return (
     <div className="game-container">
+      {countdown !== null && (
+        <div className="countdown">
+          <h2>게임 시작: {countdown}</h2>
+        </div>
+      )}
       <div className="game-mode">
         <button
           onClick={toggleGameMode}

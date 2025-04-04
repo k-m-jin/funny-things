@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>달리기 게임</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="game-container">
+      <div class="game-info">
+        <div class="score">점수: <span id="score">0</span></div>
+        <div class="speed">속도: <span id="speed">1</span></div>
+      </div>
+      <div id="game-area">
+        <div id="player"></div>
+        <div id="track"></div>
+      </div>
+      <div class="controls">
+        <p>방향키를 사용하여 플레이어를 움직이세요!</p>
+        <button id="start-btn">게임 시작</button>
+        <button id="reset-btn">재시작</button>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
