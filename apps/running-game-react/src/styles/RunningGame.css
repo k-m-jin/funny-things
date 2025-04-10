@@ -1,59 +1,72 @@
+:root {
+  --primary-color: #6c63ff;
+  --secondary-color: #ff6584;
+  --background-color: #f8f9fe;
+  --text-color: #2d3748;
+  --border-color: #e2e8f0;
+  --shadow-color: rgba(108, 99, 255, 0.1);
+}
+
 /* 게임 컨테이너 스타일 */
 .game-container {
   width: 800px;
   max-width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px;
   text-align: center;
-  font-family: "Arial", sans-serif;
+  font-family: "Poppins", "Arial", sans-serif;
+  background-color: var(--background-color);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px var(--shadow-color);
 }
 
 /* 게임 모드 버튼 */
 .game-mode {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .game-mode button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   font-size: 16px;
-  border-radius: 20px;
-  transition: all 0.3s;
+  font-weight: 600;
+  border-radius: 30px;
+  transition: all 0.3s ease;
   cursor: pointer;
   width: 200px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px var(--shadow-color);
 }
 
-.multiplayer-btn {
-  background-color: #4c7af5;
-  color: white;
-  border: 2px solid #4c7af5;
-}
-
-.singleplayer-btn {
-  background-color: #f57a4c;
-  color: white;
-  border: 2px solid #f57a4c;
+.game-mode button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow-color);
 }
 
 /* 게임 정보 영역 스타일 */
 .game-info {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 20px;
   font-size: 18px;
-  font-weight: bold;
-  flex-wrap: wrap;
+  font-weight: 500;
+  color: var(--text-color);
 }
 
 .player-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 10px;
+  padding: 15px 25px;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px var(--shadow-color);
 }
 
 .player-status {
-  font-size: 20px;
-  margin-bottom: 5px;
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: var(--primary-color);
+  font-weight: 600;
 }
 
 /* 게임 영역 스타일 */
@@ -61,10 +74,12 @@
   position: relative;
   width: 100%;
   height: 400px;
-  background-color: #ddd;
-  border: 2px solid #333;
+  background-color: white;
+  border: none;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px var(--shadow-color);
 }
 
 /* 플레이어 스타일 */
@@ -74,17 +89,19 @@
   height: 60px;
   bottom: 20px;
   transform: translateX(-50%);
-  border-radius: 5px;
+  border-radius: 10px;
   z-index: 10;
   transition: left 0.1s ease;
 }
 
 .player-1 {
-  /* 이미 스타일 속성에서 색상 지정됨 */
+  background-color: var(--primary-color);
+  box-shadow: 0 4px 15px var(--shadow-color);
 }
 
 .player-2 {
-  /* 이미 스타일 속성에서 색상 지정됨 */
+  background-color: var(--secondary-color);
+  box-shadow: 0 4px 15px rgba(255, 101, 132, 0.2);
 }
 
 /* 장애물 스타일 */
@@ -92,8 +109,9 @@
   position: absolute;
   width: 30px;
   height: 30px;
-  background-color: #333;
+  background-color: var(--text-color);
   border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(45, 55, 72, 0.2);
 }
 
 /* 트랙 스타일 */
@@ -102,66 +120,46 @@
   width: 100%;
   height: 20px;
   bottom: 0;
-  background-color: #555;
+  background-color: var(--border-color);
 }
 
 /* 컨트롤 영역 스타일 */
 .controls {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .controls p {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   font-size: 16px;
-  color: #555;
-  line-height: 1.5;
+  color: var(--text-color);
+  line-height: 1.6;
 }
 
 /* 버튼 스타일 */
 button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   margin: 0 10px;
   font-size: 16px;
-  background-color: #4caf50;
+  font-weight: 600;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 30px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px var(--shadow-color);
 }
 
 button:hover {
-  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow-color);
 }
 
 button:disabled {
-  background-color: #cccccc;
+  background-color: var(--border-color);
   cursor: not-allowed;
-}
-
-/* 모바일 반응형 */
-@media (max-width: 768px) {
-  .game-container {
-    width: 95%;
-    padding: 10px;
-  }
-
-  #game-area {
-    height: 350px;
-  }
-
-  .controls button {
-    padding: 8px 15px;
-    font-size: 14px;
-  }
-
-  .game-info {
-    font-size: 16px;
-  }
-
-  .player-status {
-    font-size: 18px;
-  }
+  transform: none;
+  box-shadow: none;
 }
 
 /* 카운트다운 스타일 */
@@ -170,8 +168,47 @@ button:disabled {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 36px;
-  font-weight: bold;
-  color: #333;
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-shadow: 0 2px 10px var(--shadow-color);
   z-index: 20;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .game-container {
+    width: 95%;
+    padding: 20px;
+  }
+
+  #game-area {
+    height: 350px;
+  }
+
+  .game-info {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .player-info {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .controls button {
+    padding: 10px 20px;
+    font-size: 14px;
+    margin: 5px;
+  }
+
+  .countdown {
+    font-size: 36px;
+    padding: 15px 30px;
+  }
 }
