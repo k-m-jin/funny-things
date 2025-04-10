@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "outputDirectory": "apps/running-game-react/build",
+  "outputDirectory": "build",
   "builds": [
     {
       "src": "apps/running-game-react/package.json",
       "use": "@vercel/static-build",
       "config": {
         "distDir": "build",
-        "buildCommand": "cd apps/running-game-react && npm install && npm run build"
+        "buildCommand": "cd apps/running-game-react && npm install && npm run vercel-build"
       }
     }
   ],
